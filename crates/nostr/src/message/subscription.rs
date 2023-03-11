@@ -64,6 +64,9 @@ pub struct Filter {
     #[serde(rename = "#r")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub references: Option<Vec<String>>,
+    #[serde(rename = "#d")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replaceable_events: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -89,6 +92,7 @@ impl Filter {
             pubkeys: None,
             hashtags: None,
             references: None,
+            replaceable_events: None,
             search: None,
             since: None,
             until: None,
@@ -213,6 +217,26 @@ impl Filter {
     pub fn references(self, v: impl Into<Vec<String>>) -> Self {
         Self {
             references: Some(v.into()),
+            ..self
+        }
+    }
+
+    /// Set replaceable event ID
+    ///
+    /// <https://github.com/nostr-protocol/nips/blob/master/3.md>
+    pub fn replaceable_event(self, v: impl Into<String>) -> Self {
+        Self {
+            replaceable_events: Some(vec![v.into()]),
+            ..self
+        }
+    }
+
+    /// Set replaceable event ID
+    ///
+    /// <https://github.com/nostr-protocol/nips/blob/master/33.md>
+    pub fn replaceable_events(self, v: impl Into<Vec<String>>) -> Self {
+        Self {
+            replaceable_events: Some(v.into()),
             ..self
         }
     }
